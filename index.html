@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadoras Especializadas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .nav-tabs {
+            display: flex;
+            overflow-x: auto;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 5px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+
+        .nav-tab {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px 8px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.8);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .nav-tab.active {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-tab:hover:not(.active) {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .calculator {
+            display: none;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .calculator.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .calc-title {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2d3748;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 15px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+            display: none;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        .result-value {
+            color: #2d3748;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .conversion-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .conversion-item {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .conversion-item:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .conversion-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .conversion-unit {
+            font-size: 0.9rem;
+            color: #4a5568;
+        }
+
+        .tip-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .tip-btn {
+            padding: 12px 8px;
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .tip-btn:hover, .tip-btn.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .currency-symbol {
+            font-size: 1.3rem;
+            color: #667eea;
+            margin-right: 5px;
+        }
+
+        @media (max-width: 480px) {
+            .nav-tabs {
+                padding: 3px;
+            }
+            
+            .nav-tab {
+                font-size: 0.8rem;
+                padding: 10px 6px;
+                min-width: 100px;
+            }
+            
+            .calculator {
+                padding: 20px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .form-row .form-group {
+                margin-bottom: 20px;
+            }
+            
+            .conversion-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .tip-buttons {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: rgba(255,255,255,0.8);
+            margin-top: 40px;
+        }
+
+        .amortization-table {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 15px;
+            border-radius: 10px;
+            background: white;
+        }
+
+        .amortization-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .amortization-table th,
+        .amortization-table td {
+            padding: 12px 8px;
+            text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .amortization-table th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        .amortization-table td {
+            background: white;
+        }
+
+        .amortization-table tr:hover td {
+            background: #f7fafc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧮 Calculadoras Especializadas</h1>
+            <p>Herramientas financieras y de conversión</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-calc="hipoteca">🏠 Hipoteca</button>
+            <button class="nav-tab" data-calc="impuestos">💰 Impuestos</button>
+            <button class="nav-tab" data-calc="propinas">🍽️ Propinas</button>
+            <button class="nav-tab" data-calc="conversion">📐 Conversión</button>
+        </div>
+
+        <!-- Calculadora de Hipoteca -->
+        <div class="calculator active" id="calc-hipoteca">
+            <h2 class="calc-title">Calculadora de Hipoteca</h2>
+            <div class="form-group">
+                <label for="precio-casa">💵 Precio de la casa</label>
+                <input type="number" id="precio-casa" placeholder="300000" value="300000">
+            </div>
+            <div class="form-group">
+                <label for="enganche">💳 Enganche (%)</label>
+                <input type="number" id="enganche" placeholder="20" value="20" min="0" max="100">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="tasa-interes">📈 Tasa de interés (%)</label>
+                    <input type="number" id="tasa-interes" placeholder="3.5" value="3.5" step="0.1">
+                </div>
+                <div class="form-group">
+                    <label for="anos-prestamo">📅 Años del préstamo</label>
+                    <select id="anos-prestamo">
+                        <option value="15">15 años</option>
+                        <option value="20">20 años</option>
+                        <option value="30" selected>30 años</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn" onclick="calcularHipoteca()">Calcular Hipoteca</button>
+            
+            <div class="result" id="resultado-hipoteca">
+                <h3>Resumen de tu Hipoteca</h3>
+                <div class="result-item">
+                    <span class="result-label">Monto del préstamo:</span>
+                    <span class="result-value" id="monto-prestamo">$0</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Pago mensual:</span>
+                    <span class="result-value" id="pago-mensual">$0</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Total de intereses:</span>
+                    <span class="result-value" id="total-intereses">$0</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Total a pagar:</span>
+                    <span class="result-value" id="total-pagar">$0</span>
+                </div>
+                
+                <div class="amortization-table" id="tabla-amortizacion" style="display: none;">
+                    <h4 style="margin: 15px 0 10px 0; color: #4a5568;">Tabla de Amortización (Primeros 12 meses)</h4>
+                    <table id="amortization-table">
+                        <thead>
+                            <tr>
+                                <th>Mes</th>
+                                <th>Pago</th>
+                                <th>Principal</th>
+                                <th>Interés</th>
+                                <th>Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                
+                <button class="btn" onclick="toggleAmortization()" id="btn-amortization">Ver Tabla de Amortización</button>
+            </div>
+        </div>
+
+        <!-- Calculadora de Impuestos -->
+        <div class="calculator" id="calc-impuestos">
+            <h2 class="calc-title">Calculadora de Impuestos</h2>
+            <div class="form-group">
+                <label for="salario-bruto">💼 Salario bruto anual</label>
+                <input type="number" id="salario-bruto" placeholder="50000" value="50000">
+            </div>
+            <div class="form-group">
+                <label for="estado-civil">👫 Estado civil</label>
+                <select id="estado-civil">
+                    <option value="soltero">Soltero</option>
+                    <option value="casado">Casado</option>
+                    <option value="jefe-familia">Jefe de familia</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="dependientes">👶 Dependientes</label>
+                    <input type="number" id="dependientes" placeholder="0" value="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="deducciones">📝 Deducciones extra</label>
+                    <input type="number" id="deducciones" placeholder="0" value="0">
+                </div>
+            </div>
+            
+            <!-- Sección de porcentajes personalizables -->
+            <div style="background: rgba(102, 126, 234, 0.1); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                <h3 style="color: #4a5568; margin-bottom: 15px; font-size: 1.1rem;">⚙️ Configurar Porcentajes de Impuestos</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="tasa-federal">🏛️ Impuesto Federal (%)</label>
+                        <input type="number" id="tasa-federal" placeholder="22" value="22" min="0" max="50" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="tasa-estatal">🏢 Impuesto Estatal (%)</label>
+                        <input type="number" id="tasa-estatal" placeholder="5" value="5" min="0" max="15" step="0.1">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="tasa-seguro-social">👥 Seguro Social (%)</label>
+                        <input type="number" id="tasa-seguro-social" placeholder="6.2" value="6.2" min="0" max="10" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="tasa-medicare">🏥 Medicare (%)</label>
+                        <input type="number" id="tasa-medicare" placeholder="1.45" value="1.45" min="0" max="5" step="0.05">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="tasa-desempleo">💼 Seguro Desempleo (%)</label>
+                        <input type="number" id="tasa-desempleo" placeholder="0.5" value="0.5" min="0" max="3" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="otras-deducciones">📋 Otras Deducciones (%)</label>
+                        <input type="number" id="otras-deducciones" placeholder="0" value="0" min="0" max="10" step="0.1">
+                    </div>
+                </div>
+                
+                <div class="tip-buttons" style="margin-top: 15px;">
+                    <button class="tip-btn" onclick="cargarPerfilImpuestos('basico')" style="grid-column: span 2;">📊 Perfil Básico</button>
+                    <button class="tip-btn" onclick="cargarPerfilImpuestos('alto')" style="grid-column: span 2;">💰 Ingresos Altos</button>
+                    <button class="tip-btn" onclick="cargarPerfilImpuestos('california')" style="grid-column: span 2;">🌴 California</button>
+                </div>
+            </div>
+            
+            <button class="btn" onclick="calcularImpuestos()">Calcular Impuestos</button>
+            
+            <div class="result" id="resultado-impuestos">
+                <h3>Cálculo de Impuestos Detallado</h3>
+                <div class="result-item">
+                    <span class="result-label">Salario bruto anual:</span>
+                    <span class="result-value" id="salario-bruto-display">$0</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Deducciones totales:</span>
+                    <span class="result-value" id="deducciones-totales">$0</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Ingreso gravable:</span>
+                    <span class="result-value" id="ingreso-gravable">$0</span>
+                </div>
+                
+                <!-- Desglose detallado -->
+                <div style="background: #f7fafc; padding: 15px; border-radius: 10px; margin: 15px 0;">
+                    <h4 style="color: #4a5568; margin-bottom: 10px;">📊 Desglose de Impuestos</h4>
+                    <div class="result-item">
+                        <span class="result-label">Impuesto federal (<span id="tasa-federal-display">22</span>%):</span>
+                        <span class="result-value" id="impuesto-federal">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Impuesto estatal (<span id="tasa-estatal-display">5</span>%):</span>
+                        <span class="result-value" id="impuesto-estatal">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Seguro Social (<span id="tasa-ss-display">6.2</span>%):</span>
+                        <span class="result-value" id="seguro-social">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Medicare (<span id="tasa-medicare-display">1.45</span>%):</span>
+                        <span class="result-value" id="medicare">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Seguro Desempleo (<span id="tasa-desempleo-display">0.5</span>%):</span>
+                        <span class="result-value" id="seguro-desempleo">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Otras deducciones (<span id="tasa-otras-display">0</span>%):</span>
+                        <span class="result-value" id="otras-deducciones-monto">$0</span>
+                    </div>
+                </div>
+                
+                <div class="result-item" style="border-top: 2px solid #667eea; padding-top: 15px;">
+                    <span class="result-label">Total de impuestos:</span>
+                    <span class="result-value" id="total-impuestos">$0</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Salario neto anual:</span>
+                    <span class="result-value" id="salario-neto">$0</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Salario neto mensual:</span>
+                    <span class="result-value" id="salario-mensual">$0</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Salario neto semanal:</span>
+                    <span class="result-value" id="salario-semanal">$0</span>
+                </div>
+                
+                <!-- Gráfico visual de porcentajes -->
+                <div style="background: white; padding: 15px; border-radius: 10px; margin: 15px 0;">
+                    <h4 style="color: #4a5568; margin-bottom: 10px;">📈 Distribución del Salario</h4>
+                    <div id="grafico-impuestos" style="margin: 10px 0;">
+                        <!-- Se llena dinámicamente -->
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Tasa efectiva de impuestos:</span>
+                        <span class="result-value" id="tasa-efectiva">0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calculadora de Propinas -->
+        <div class="calculator" id="calc-propinas">
+            <h2 class="calc-title">Calculadora de Propinas</h2>
+            <div class="form-group">
+                <label for="total-cuenta">🧾 Total de la cuenta</label>
+                <input type="number" id="total-cuenta" placeholder="100.00" value="100" step="0.01">
+            </div>
+            <div class="form-group">
+                <label for="porcentaje-propina">💡 Porcentaje de propina</label>
+                <input type="number" id="porcentaje-propina" placeholder="15" value="15" min="0" max="50" step="0.5">
+            </div>
+            
+            <div class="tip-buttons">
+                <button class="tip-btn" onclick="setPropina(10)">10%</button>
+                <button class="tip-btn" onclick="setPropina(15)">15%</button>
+                <button class="tip-btn" onclick="setPropina(18)">18%</button>
+                <button class="tip-btn" onclick="setPropina(20)">20%</button>
+                <button class="tip-btn" onclick="setPropina(22)">22%</button>
+                <button class="tip-btn" onclick="setPropina(25)">25%</button>
+            </div>
+            
+            <div class="form-group">
+                <label for="num-personas">👥 Número de personas</label>
+                <input type="number" id="num-personas" placeholder="1" value="1" min="1">
+            </div>
+            
+            <button class="btn" onclick="calcularPropina()">Calcular Propina</button>
+            
+            <div class="result" id="resultado-propina">
+                <h3>Cálculo de Propina</h3>
+                <div class="result-item">
+                    <span class="result-label">Monto de propina:</span>
+                    <span class="result-value" id="monto-propina">$0.00</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Total a pagar:</span>
+                    <span class="result-value" id="total-con-propina">$0.00</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Por persona:</span>
+                    <span class="result-value" id="por-persona">$0.00</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Propina por persona:</span>
+                    <span class="result-value" id="propina-persona">$0.00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calculadora de Conversión -->
+        <div class="calculator" id="calc-conversion">
+            <h2 class="calc-title">Conversor de Unidades</h2>
+            <div class="form-group">
+                <label for="tipo-conversion">📏 Tipo de conversión</label>
+                <select id="tipo-conversion" onchange="cambiarTipoConversion()">
+                    <option value="longitud">Longitud</option>
+                    <option value="peso">Peso</option>
+                    <option value="temperatura">Temperatura</option>
+                    <option value="volumen">Volumen</option>
+                    <option value="area">Área</option>
+                    <option value="velocidad">Velocidad</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="valor-original">🔢 Valor a convertir</label>
+                <input type="number" id="valor-original" placeholder="1" value="1" step="any" oninput="convertirUnidades()">
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="unidad-origen">De:</label>
+                    <select id="unidad-origen" onchange="convertirUnidades()">
+                        <!-- Se llena dinámicamente -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="unidad-destino">A:</label>
+                    <select id="unidad-destino" onchange="convertirUnidades()">
+                        <!-- Se llena dinámicamente -->
+                    </select>
+                </div>
+            </div>
+            
+            <div class="result show" id="resultado-conversion">
+                <h3>Resultado</h3>
+                <div style="text-align: center; font-size: 1.5rem; padding: 20px; background: white; border-radius: 10px; margin: 15px 0;">
+                    <span id="valor-convertido" style="color: #667eea; font-weight: 700;">1</span>
+                    <span id="unidad-resultado" style="color: #4a5568; margin-left: 10px;">metros</span>
+                </div>
+                
+                <div class="conversion-grid" id="conversiones-comunes">
+                    <!-- Se llena dinámicamente -->
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>📱 Aplicación offline • Sin conexión a internet requerida</p>
+        </div>
+    </div>
+
+    <script>
+        // Datos para conversiones
+        const unidades = {
+            longitud: {
+                metro: 1,
+                kilometro: 0.001,
+                centimetro: 100,
+                milimetro: 1000,
+                pulgada: 39.3701,
+                pie: 3.28084,
+                yarda: 1.09361,
+                milla: 0.000621371
+            },
+            peso: {
+                kilogramo: 1,
+                gramo: 1000,
+                libra: 2.20462,
+                onza: 35.274,
+                tonelada: 0.001,
+                piedra: 0.157473
+            },
+            temperatura: {
+                celsius: { nombre: 'Celsius', simbolo: '°C' },
+                fahrenheit: { nombre: 'Fahrenheit', simbolo: '°F' },
+                kelvin: { nombre: 'Kelvin', simbolo: 'K' }
+            },
+            volumen: {
+                litro: 1,
+                mililitro: 1000,
+                galon: 0.264172,
+                cuarto: 1.05669,
+                pinta: 2.11338,
+                taza: 4.22675,
+                onza_liquida: 33.814,
+                metro_cubico: 0.001
+            },
+            area: {
+                metro_cuadrado: 1,
+                kilometro_cuadrado: 0.000001,
+                centimetro_cuadrado: 10000,
+                pie_cuadrado: 10.7639,
+                pulgada_cuadrada: 1550,
+                acre: 0.000247105,
+                hectarea: 0.0001
+            },
+            velocidad: {
+                mps: 1,
+                kmh: 3.6,
+                mph: 2.23694,
+                nudos: 1.94384,
+                pps: 3.28084
+            }
+        };
+
+        // Navegación entre calculadoras
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const calcType = this.dataset.calc;
+                
+                // Actualizar tabs activos
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Mostrar calculadora correspondiente
+                document.querySelectorAll('.calculator').forEach(calc => calc.classList.remove('active'));
+                document.getElementById(`calc-${calcType}`).classList.add('active');
+                
+                // Inicializar conversor si es necesario
+                if (calcType === 'conversion') {
+                    cambiarTipoConversion();
+                }
+            });
+        });
+
+        // Calculadora de Hipoteca
+        function calcularHipoteca() {
+            const precioCasa = parseFloat(document.getElementById('precio-casa').value) || 0;
+            const porcentajeEnganche = parseFloat(document.getElementById('enganche').value) || 0;
+            const tasaAnual = parseFloat(document.getElementById('tasa-interes').value) || 0;
+            const años = parseInt(document.getElementById('anos-prestamo').value) || 30;
+
+            const enganche = precioCasa * (porcentajeEnganche / 100);
+            const montoPrestamo = precioCasa - enganche;
+            const tasaMensual = tasaAnual / 100 / 12;
+            const numeroPageos = años * 12;
+
+            let pagoMensual = 0;
+            if (tasaMensual > 0) {
+                pagoMensual = montoPrestamo * (tasaMensual * Math.pow(1 + tasaMensual, numeroPageos)) / (Math.pow(1 + tasaMensual, numeroPageos) - 1);
+            } else {
+                pagoMensual = montoPrestamo / numeroPageos;
+            }
+
+            const totalPagos = pagoMensual * numeroPageos;
+            const totalIntereses = totalPagos - montoPrestamo;
+
+            // Mostrar resultados
+            document.getElementById('monto-prestamo').textContent = formatearMoneda(montoPrestamo);
+            document.getElementById('pago-mensual').textContent = formatearMoneda(pagoMensual);
+            document.getElementById('total-intereses').textContent = formatearMoneda(totalIntereses);
+            document.getElementById('total-pagar').textContent = formatearMoneda(totalPagos);
+            
+            document.getElementById('resultado-hipoteca').classList.add('show');
+            
+            // Generar tabla de amortización
+            generarTablaAmortizacion(montoPrestamo, pagoMensual, tasaMensual, numeroPageos);
+        }
+
+        function generarTablaAmortizacion(balance, pagoMensual, tasaMensual, numeroPageos) {
+            const tbody = document.querySelector('#amortization-table tbody');
+            tbody.innerHTML = '';
+            
+            let balanceActual = balance;
+            const mesesMostrar = Math.min(12, numeroPageos); // Mostrar solo los primeros 12 meses
+            
+            for (let mes = 1; mes <= mesesMostrar; mes++) {
+                const interesMensual = balanceActual * tasaMensual;
+                const principalMensual = pagoMensual - interesMensual;
+                balanceActual -= principalMensual;
+                
+                const fila = tbody.insertRow();
+                fila.innerHTML = `
+                    <td>${mes}</td>
+                    <td>${formatearMoneda(pagoMensual)}</td>
+                    <td>${formatearMoneda(principalMensual)}</td>
+                    <td>${formatearMoneda(interesMensual)}</td>
+                    <td>${formatearMoneda(balanceActual)}</td>
+                `;
+            }
+        }
+
+        function toggleAmortization() {
+            const tabla = document.getElementById('tabla-amortizacion');
+            const btn = document.getElementById('btn-amortization');
+            
+            if (tabla.style.display === 'none') {
+                tabla.style.display = 'block';
+                btn.textContent = 'Ocultar Tabla de Amortización';
+            } else {
+                tabla.style.display = 'none';
+                btn.textContent = 'Ver Tabla de Amortización';
+            }
+        }
+
+        // Calculadora de Impuestos (mejorada con porcentajes personalizables)
+        function calcularImpuestos() {
+            const salarioBruto = parseFloat(document.getElementById('salario-bruto').value) || 0;
+            const estadoCivil = document.getElementById('estado-civil').value;
+            const dependientes = parseInt(document.getElementById('dependientes').value) || 0;
+            const deduccionesExtra = parseFloat(document.getElementById('deducciones').value) || 0;
+            
+            // Obtener porcentajes personalizados
+            const tasaFederal = parseFloat(document.getElementById('tasa-federal').value) || 0;
+            const tasaEstatal = parseFloat(document.getElementById('tasa-estatal').value) || 0;
+            const tasaSeguroSocial = parseFloat(document.getElementById('tasa-seguro-social').value) || 0;
+            const tasaMedicare = parseFloat(document.getElementById('tasa-medicare').value) || 0;
+            const tasaDesempleo = parseFloat(document.getElementById('tasa-desempleo').value) || 0;
+            const tasaOtrasDeducciones = parseFloat(document.getElementById('otras-deducciones').value) || 0;
+
+            // Deducciones estándar 2024
+            let deduccionEstandar = 0;
+            switch (estadoCivil) {
+                case 'soltero':
+                    deduccionEstandar = 14600;
+                    break;
+                case 'casado':
+                    deduccionEstandar = 29200;
+                    break;
+                case 'jefe-familia':
+                    deduccionEstandar = 21900;
+                    break;
+            }
+
+            // Deducciones por dependientes (aproximado)
+            const deduccionDependientes = dependientes * 4000;
+            const deduccionesTotales = deduccionEstandar + deduccionesExtra + deduccionDependientes;
+            const ingresoGravable = Math.max(0, salarioBruto - deduccionesTotales);
+            
+            // Cálculos de impuestos con porcentajes personalizados
+            const impuestoFederal = ingresoGravable * (tasaFederal / 100);
+            const impuestoEstatal = ingresoGravable * (tasaEstatal / 100);
+            const seguroSocial = salarioBruto * (tasaSeguroSocial / 100);
+            const medicare = salarioBruto * (tasaMedicare / 100);
+            const seguroDesempleo = salarioBruto * (tasaDesempleo / 100);
+            const otrasDeducciones = salarioBruto * (tasaOtrasDeducciones / 100);
+            
+            const totalImpuestos = impuestoFederal + impuestoEstatal + seguroSocial + medicare + seguroDesempleo + otrasDeducciones;
+            const salarioNeto = salarioBruto - totalImpuestos;
+            const tasaEfectiva = salarioBruto > 0 ? (totalImpuestos / salarioBruto * 100) : 0;
+
+            // Mostrar resultados
+            document.getElementById('salario-bruto-display').textContent = formatearMoneda(salarioBruto);
+            document.getElementById('deducciones-totales').textContent = formatearMoneda(deduccionesTotales);
+            document.getElementById('ingreso-gravable').textContent = formatearMoneda(ingresoGravable);
+            document.getElementById('impuesto-federal').textContent = formatearMoneda(impuestoFederal);
+            document.getElementById('impuesto-estatal').textContent = formatearMoneda(impuestoEstatal);
+            document.getElementById('seguro-social').textContent = formatearMoneda(seguroSocial);
+            document.getElementById('medicare').textContent = formatearMoneda(medicare);
+            document.getElementById('seguro-desempleo').textContent = formatearMoneda(seguroDesempleo);
+            document.getElementById('otras-deducciones-monto').textContent = formatearMoneda(otrasDeducciones);
+            document.getElementById('total-impuestos').textContent = formatearMoneda(totalImpuestos);
+            document.getElementById('salario-neto').textContent = formatearMoneda(salarioNeto);
+            document.getElementById('salario-mensual').textContent = formatearMoneda(salarioNeto / 12);
+            document.getElementById('salario-semanal').textContent = formatearMoneda(salarioNeto / 52);
+            document.getElementById('tasa-efectiva').textContent = tasaEfectiva.toFixed(2) + '%';
+            
+            // Actualizar displays de tasas
+            document.getElementById('tasa-federal-display').textContent = tasaFederal;
+            document.getElementById('tasa-estatal-display').textContent = tasaEstatal;
+            document.getElementById('tasa-ss-display').textContent = tasaSeguroSocial;
+            document.getElementById('tasa-medicare-display').textContent = tasaMedicare;
+            document.getElementById('tasa-desempleo-display').textContent = tasaDesempleo;
+            document.getElementById('tasa-otras-display').textContent = tasaOtrasDeducciones;
+            
+            // Generar gráfico visual
+            generarGraficoImpuestos(salarioNeto, totalImpuestos, salarioBruto);
+            
+            document.getElementById('resultado-impuestos').classList.add('show');
+        }
+
+        function generarGraficoImpuestos(salarioNeto, totalImpuestos, salarioBruto) {
+            const grafico = document.getElementById('grafico-impuestos');
+            const porcentajeNeto = (salarioNeto / salarioBruto * 100);
+            const porcentajeImpuestos = (totalImpuestos / salarioBruto * 100);
+            
+            grafico.innerHTML = `
+                <div style="display: flex; height: 30px; border-radius: 15px; overflow: hidden; margin: 10px 0;">
+                    <div style="background: linear-gradient(135deg, #48bb78, #38a169); width: ${porcentajeNeto}%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.9rem;">
+                        ${porcentajeNeto.toFixed(1)}% Neto
+                    </div>
+                    <div style="background: linear-gradient(135deg, #f56565, #e53e3e); width: ${porcentajeImpuestos}%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.9rem;">
+                        ${porcentajeImpuestos.toFixed(1)}% Impuestos
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #4a5568;">
+                    <span>💚 Dinero que te queda: ${formatearMoneda(salarioNeto)}</span>
+                    <span>🏛️ Impuestos totales: ${formatearMoneda(totalImpuestos)}</span>
+                </div>
+            `;
+        }
+
+        function cargarPerfilImpuestos(perfil) {
+            switch(perfil) {
+                case 'basico':
+                    document.getElementById('tasa-federal').value = 12;
+                    document.getElementById('tasa-estatal').value = 3;
+                    document.getElementById('tasa-seguro-social').value = 6.2;
+                    document.getElementById('tasa-medicare').value = 1.45;
+                    document.getElementById('tasa-desempleo').value = 0.5;
+                    document.getElementById('otras-deducciones').value = 0;
+                    break;
+                case 'alto':
+                    document.getElementById('tasa-federal').value = 32;
+                    document.getElementById('tasa-estatal').value = 8;
+                    document.getElementById('tasa-seguro-social').value = 6.2;
+                    document.getElementById('tasa-medicare').value = 2.35; // Incluye Medicare adicional
+                    document.getElementById('tasa-desempleo').value = 0.6;
+                    document.getElementById('otras-deducciones').value = 1;
+                    break;
+                case 'california':
+                    document.getElementById('tasa-federal').value = 24;
+                    document.getElementById('tasa-estatal').value = 9.3;
+                    document.getElementById('tasa-seguro-social').value = 6.2;
+                    document.getElementById('tasa-medicare').value = 1.45;
+                    document.getElementById('tasa-desempleo').value = 1.1;
+                    document.getElementById('otras-deducciones').value = 0.5;
+                    break;
+            }
+            
+            // Recalcular automáticamente
+            if (document.getElementById('salario-bruto').value) {
+                calcularImpuestos();
+            }
+        }
+
+        // Auto-calcular cuando cambian los porcentajes
+        ['tasa-federal', 'tasa-estatal', 'tasa-seguro-social', 'tasa-medicare', 'tasa-desempleo', 'otras-deducciones'].forEach(id => {
+            document.getElementById(id).addEventListener('input', function() {
+                if (document.getElementById('salario-bruto').value) {
+                    calcularImpuestos();
+                }
+            });
+        });
+
+        // Calculadora de Propinas
+        function setPropina(porcentaje) {
+            document.getElementById('porcentaje-propina').value = porcentaje;
+            
+            // Actualizar estilos de botones
+            document.querySelectorAll('.tip-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            calcularPropina();
+        }
+
+        function calcularPropina() {
+            const totalCuenta = parseFloat(document.getElementById('total-cuenta').value) || 0;
+            const porcentajePropina = parseFloat(document.getElementById('porcentaje-propina').value) || 0;
+            const numPersonas = parseInt(document.getElementById('num-personas').value) || 1;
+
+            const montoPropina = totalCuenta * (porcentajePropina / 100);
+            const totalConPropina = totalCuenta + montoPropina;
+            const porPersona = totalConPropina / numPersonas;
+            const propinaPersona = montoPropina / numPersonas;
+
+            document.getElementById('monto-propina').textContent = formatearMoneda(montoPropina);
+            document.getElementById('total-con-propina').textContent = formatearMoneda(totalConPropina);
+            document.getElementById('por-persona').textContent = formatearMoneda(porPersona);
+            document.getElementById('propina-persona').textContent = formatearMoneda(propinaPersona);
+            
+            document.getElementById('resultado-propina').classList.add('show');
+        }
+
+        // Auto-calcular propina cuando cambian los valores
+        document.getElementById('total-cuenta').addEventListener('input', calcularPropina);
+        document.getElementById('porcentaje-propina').addEventListener('input', calcularPropina);
+        document.getElementById('num-personas').addEventListener('input', calcularPropina);
+
+        // Calculadora de Conversión
+        function cambiarTipoConversion() {
+            const tipo = document.getElementById('tipo-conversion').value;
+            const selectOrigen = document.getElementById('unidad-origen');
+            const selectDestino = document.getElementById('unidad-destino');
+            
+            selectOrigen.innerHTML = '';
+            selectDestino.innerHTML = '';
+
+            if (tipo === 'temperatura') {
+                Object.keys(unidades.temperatura).forEach(unidad => {
+                    const info = unidades.temperatura[unidad];
+                    const option1 = new Option(info.nombre, unidad);
+                    const option2 = new Option(info.nombre, unidad);
+                    selectOrigen.add(option1);
+                    selectDestino.add(option2);
+                });
+                selectDestino.selectedIndex = 1;
+            } else {
+                Object.keys(unidades[tipo]).forEach(unidad => {
+                    const nombreUnidad = unidad.replace('_', ' ');
+                    const option1 = new Option(nombreUnidad, unidad);
+                    const option2 = new Option(nombreUnidad, unidad);
+                    selectOrigen.add(option1);
+                    selectDestino.add(option2);
+                });
+                selectDestino.selectedIndex = 1;
+            }
+            
+            convertirUnidades();
+        }
+
+        function convertirUnidades() {
+            const valor = parseFloat(document.getElementById('valor-original').value) || 0;
+            const tipo = document.getElementById('tipo-conversion').value;
+            const unidadOrigen = document.getElementById('unidad-origen').value;
+            const unidadDestino = document.getElementById('unidad-destino').value;
+            
+            let resultado = 0;
+            
+            if (tipo === 'temperatura') {
+                resultado = convertirTemperatura(valor, unidadOrigen, unidadDestino);
+            } else {
+                const factorOrigen = unidades[tipo][unidadOrigen];
+                const factorDestino = unidades[tipo][unidadDestino];
+                resultado = (valor / factorOrigen) * factorDestino;
+            }
+            
+            document.getElementById('valor-convertido').textContent = resultado.toFixed(4);
+            document.getElementById('unidad-resultado').textContent = unidadDestino.replace('_', ' ');
+            
+            mostrarConversionesComunes(valor, tipo, unidadOrigen);
+        }
+
+        function convertirTemperatura(valor, origen, destino) {
+            let celsius = valor;
+            
+            // Convertir a Celsius primero
+            if (origen === 'fahrenheit') {
+                celsius = (valor - 32) * 5/9;
+            } else if (origen === 'kelvin') {
+                celsius = valor - 273.15;
+            }
+            
+            // Convertir de Celsius al destino
+            if (destino === 'fahrenheit') {
+                return celsius * 9/5 + 32;
+            } else if (destino === 'kelvin') {
+                return celsius + 273.15;
+            }
+            
+            return celsius;
+        }
+
+        function mostrarConversionesComunes(valor, tipo, unidadOrigen) {
+            const grid = document.getElementById('conversiones-comunes');
+            grid.innerHTML = '';
+            
+            if (tipo === 'temperatura') {
+                Object.keys(unidades.temperatura).forEach(unidad => {
+                    if (unidad !== unidadOrigen) {
+                        const resultado = convertirTemperatura(valor, unidadOrigen, unidad);
+                        const info = unidades.temperatura[unidad];
+                        
+                        const item = document.createElement('div');
+                        item.className = 'conversion-item';
+                        item.innerHTML = `
+                            <div class="conversion-value">${resultado.toFixed(2)}</div>
+                            <div class="conversion-unit">${info.simbolo}</div>
+                        `;
+                        grid.appendChild(item);
+                    }
+                });
+            } else {
+                const factorOrigen = unidades[tipo][unidadOrigen];
+                const unidadesComunes = Object.keys(unidades[tipo]).slice(0, 6);
+                
+                unidadesComunes.forEach(unidad => {
+                    if (unidad !== unidadOrigen) {
+                        const factorDestino = unidades[tipo][unidad];
+                        const resultado = (valor / factorOrigen) * factorDestino;
+                        
+                        const item = document.createElement('div');
+                        item.className = 'conversion-item';
+                        item.innerHTML = `
+                            <div class="conversion-value">${resultado.toFixed(4)}</div>
+                            <div class="conversion-unit">${unidad.replace('_', ' ')}</div>
+                        `;
+                        grid.appendChild(item);
+                    }
+                });
+            }
+        }
+
+        // Función de formateo de moneda
+        function formatearMoneda(cantidad) {
+            return new Intl.NumberFormat('es-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(cantidad);
+        }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            cambiarTipoConversion();
+            calcularPropina();
+        });
+
+        // Permitir solo números en inputs numéricos
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('keypress', function(e) {
+                if (!/[\d.-]/.test(e.key) && !['Backspace', 'Delete', 'Tab', 'Enter', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+        // Prevenir valores negativos donde no tenga sentido
+        document.querySelectorAll('#precio-casa, #total-cuenta, #valor-original').forEach(input => {
+            input.addEventListener('input', function() {
+                if (this.value < 0) this.value = 0;
+            });
+        });
+
+        // Animación suave al cambiar de calculadora
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Pequeño haptic feedback en dispositivos móviles
+                if ('vibrate' in navigator) {
+                    navigator.vibrate(50);
+                }
+            });
+        });
+
+        // Soporte para instalación como PWA
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            deferredPrompt = e;
+        });
+
+        // Scroll suave para dispositivos móviles
+        document.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+        }, { passive: false });
+
+        // Optimización para pantallas pequeñas
+        function ajustarPantalla() {
+            const vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+
+        window.addEventListener('resize', ajustarPantalla);
+        ajustarPantalla();
+    </script>
+</body>
+</html>
