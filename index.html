@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadoras Especializadas</title>
+    <title data-i18n="title">Calculadoras Especializadas</title>
     <style>
         * {
             margin: 0;
@@ -34,12 +34,45 @@
             padding: 20px 0;
             color: white;
             margin-bottom: 20px;
+            position: relative;
         }
 
         .header h1 {
             font-size: 1.8rem;
             margin-bottom: 10px;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .language-selector {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .lang-btn {
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .lang-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-1px);
+        }
+
+        .lang-btn.active {
+            background: rgba(255,255,255,0.4);
+            border-color: rgba(255,255,255,0.6);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         .nav-tabs {
@@ -341,6 +374,19 @@
             .result {
                 margin-bottom: 30px;
             }
+
+            .language-selector {
+                position: relative;
+                top: auto;
+                right: auto;
+                justify-content: center;
+                margin-bottom: 10px;
+            }
+
+            .lang-btn {
+                font-size: 0.8rem;
+                padding: 6px 10px;
+            }
         }
 
         .footer {
@@ -391,224 +437,237 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🧮 Calculadoras Especializadas</h1>
-            <p>Herramientas financieras y de conversión</p>
+            <div class="language-selector">
+                <button class="lang-btn active" onclick="cambiarIdioma('es')">🇪🇸 ES</button>
+                <button class="lang-btn" onclick="cambiarIdioma('en')">🇺🇸 EN</button>
+                <button class="lang-btn" onclick="cambiarIdioma('de')">🇩🇪 DE</button>
+            </div>
+            <h1 data-i18n="title">🧮 Calculadoras Especializadas</h1>
+            <p data-i18n="subtitle">Herramientas financieras y de conversión</p>
         </div>
 
         <div class="nav-tabs">
-            <button class="nav-tab active" data-calc="hipoteca">🏠 Hipoteca</button>
-            <button class="nav-tab" data-calc="impuestos">💰 Impuestos</button>
-            <button class="nav-tab" data-calc="propinas">🍽️ Propinas</button>
-            <button class="nav-tab" data-calc="conversion">📐 Conversión</button>
+            <button class="nav-tab active" data-calc="hipoteca">
+                <span data-i18n="nav.mortgage">🏠 Hipoteca</span>
+            </button>
+            <button class="nav-tab" data-calc="impuestos">
+                <span data-i18n="nav.taxes">💰 Impuestos</span>
+            </button>
+            <button class="nav-tab" data-calc="propinas">
+                <span data-i18n="nav.tips">🍽️ Propinas</span>
+            </button>
+            <button class="nav-tab" data-calc="conversion">
+                <span data-i18n="nav.conversion">📐 Conversión</span>
+            </button>
         </div>
 
         <!-- Calculadora de Hipoteca -->
         <div class="calculator active" id="calc-hipoteca">
-            <h2 class="calc-title">Calculadora de Hipoteca</h2>
+            <h2 class="calc-title" data-i18n="mortgage.title">Calculadora de Hipoteca</h2>
             <div class="form-group">
-                <label for="precio-casa">💵 Precio de la casa</label>
-                <input type="number" id="precio-casa" placeholder="300000" value="300000">
+                <label for="precio-casa" data-i18n="mortgage.house_price">💵 Precio de la casa</label>
+                <input type="number" id="precio-casa" data-i18n-placeholder="mortgage.house_price_placeholder" placeholder="300000" value="300000">
             </div>
             <div class="form-group">
-                <label for="enganche">💳 Enganche (%)</label>
+                <label for="enganche" data-i18n="mortgage.down_payment">💳 Enganche (%)</label>
                 <input type="number" id="enganche" placeholder="20" value="20" min="0" max="100">
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="tasa-interes">📈 Tasa de interés (%)</label>
+                    <label for="tasa-interes" data-i18n="mortgage.interest_rate">📈 Tasa de interés (%)</label>
                     <input type="number" id="tasa-interes" placeholder="3.5" value="3.5" step="0.1">
                 </div>
                 <div class="form-group">
-                    <label for="anos-prestamo">📅 Años del préstamo</label>
+                    <label for="anos-prestamo" data-i18n="mortgage.loan_years">📅 Años del préstamo</label>
                     <select id="anos-prestamo">
-                        <option value="15">15 años</option>
-                        <option value="20">20 años</option>
-                        <option value="30" selected>30 años</option>
+                        <option value="15" data-i18n="mortgage.years_15">15 años</option>
+                        <option value="20" data-i18n="mortgage.years_20">20 años</option>
+                        <option value="30" data-i18n="mortgage.years_30" selected>30 años</option>
                     </select>
                 </div>
             </div>
-            <button class="btn" onclick="calcularHipoteca()">Calcular Hipoteca</button>
+            <button class="btn" onclick="calcularHipoteca()" data-i18n="mortgage.calculate">Calcular Hipoteca</button>
             
             <div class="result" id="resultado-hipoteca">
-                <h3>Resumen de tu Hipoteca</h3>
+                <h3 data-i18n="mortgage.summary">Resumen de tu Hipoteca</h3>
                 <div class="result-item">
-                    <span class="result-label">Monto del préstamo:</span>
+                    <span class="result-label" data-i18n="mortgage.loan_amount">Monto del préstamo:</span>
                     <span class="result-value" id="monto-prestamo">$0</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label">Pago mensual:</span>
+                    <span class="result-label" data-i18n="mortgage.monthly_payment">Pago mensual:</span>
                     <span class="result-value" id="pago-mensual">$0</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label">Total de intereses:</span>
+                    <span class="result-label" data-i18n="mortgage.total_interest">Total de intereses:</span>
                     <span class="result-value" id="total-intereses">$0</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label">Total a pagar:</span>
+                    <span class="result-label" data-i18n="mortgage.total_payment">Total a pagar:</span>
                     <span class="result-value" id="total-pagar">$0</span>
                 </div>
                 
                 <div class="amortization-table" id="tabla-amortizacion" style="display: none;">
-                    <h4 style="margin: 15px 0 10px 0; color: #4a5568;">Tabla de Amortización (Primeros 12 meses)</h4>
+                    <h4 style="margin: 15px 0 10px 0; color: #4a5568;" data-i18n="mortgage.amortization_table">Tabla de Amortización (Primeros 12 meses)</h4>
                     <table id="amortization-table">
                         <thead>
                             <tr>
-                                <th>Mes</th>
-                                <th>Pago</th>
-                                <th>Principal</th>
-                                <th>Interés</th>
-                                <th>Balance</th>
+                                <th data-i18n="mortgage.month">Mes</th>
+                                <th data-i18n="mortgage.payment">Pago</th>
+                                <th data-i18n="mortgage.principal">Principal</th>
+                                <th data-i18n="mortgage.interest">Interés</th>
+                                <th data-i18n="mortgage.balance">Balance</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
                 </div>
                 
-                <button class="btn" onclick="toggleAmortization()" id="btn-amortization">Ver Tabla de Amortización</button>
+                <button class="btn" onclick="toggleAmortization()" id="btn-amortization" data-i18n="mortgage.show_table">Ver Tabla de Amortización</button>
             </div>
         </div>
 
         <!-- Calculadora de Impuestos -->
         <div class="calculator" id="calc-impuestos">
-            <h2 class="calc-title">Calculadora de Impuestos</h2>
+            <h2 class="calc-title" data-i18n="taxes.title">Calculadora de Impuestos</h2>
             <div class="form-group">
-                <label for="salario-bruto">💼 Salario bruto anual</label>
+                <label for="salario-bruto" data-i18n="taxes.gross_salary">💼 Salario bruto anual</label>
                 <input type="number" id="salario-bruto" placeholder="50000" value="50000">
             </div>
             <div class="form-group">
-                <label for="estado-civil">👫 Estado civil</label>
+                <label for="estado-civil" data-i18n="taxes.marital_status">👫 Estado civil</label>
                 <select id="estado-civil">
-                    <option value="soltero">Soltero</option>
-                    <option value="casado">Casado</option>
-                    <option value="jefe-familia">Jefe de familia</option>
+                    <option value="soltero" data-i18n="taxes.single">Soltero</option>
+                    <option value="casado" data-i18n="taxes.married">Casado</option>
+                    <option value="jefe-familia" data-i18n="taxes.head_of_household">Jefe de familia</option>
                 </select>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="dependientes">👶 Dependientes</label>
+                    <label for="dependientes" data-i18n="taxes.dependents">👶 Dependientes</label>
                     <input type="number" id="dependientes" placeholder="0" value="0" min="0">
                 </div>
                 <div class="form-group">
-                    <label for="deducciones">📝 Deducciones extra</label>
+                    <label for="deducciones" data-i18n="taxes.extra_deductions">📝 Deducciones extra</label>
                     <input type="number" id="deducciones" placeholder="0" value="0">
                 </div>
             </div>
             
             <!-- Sección de porcentajes personalizables -->
             <div style="background: rgba(102, 126, 234, 0.1); padding: 20px; border-radius: 15px; margin: 20px 0;">
-                <h3 style="color: #4a5568; margin-bottom: 15px; font-size: 1.1rem;">⚙️ Configurar Porcentajes de Impuestos</h3>
+                <h3 style="color: #4a5568; margin-bottom: 15px; font-size: 1.1rem;" data-i18n="taxes.configure_rates">⚙️ Configurar Porcentajes de Impuestos</h3>
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="tasa-federal">🏛️ Impuesto Federal (%)</label>
+                        <label for="tasa-federal" data-i18n="taxes.federal_tax">🏛️ Impuesto Federal (%)</label>
                         <input type="number" id="tasa-federal" placeholder="22" value="22" min="0" max="50" step="0.1">
                     </div>
                     <div class="form-group">
-                        <label for="tasa-estatal">🏢 Impuesto Estatal (%)</label>
+                        <label for="tasa-estatal" data-i18n="taxes.state_tax">🏢 Impuesto Estatal (%)</label>
                         <input type="number" id="tasa-estatal" placeholder="5" value="5" min="0" max="15" step="0.1">
                     </div>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="tasa-seguro-social">👥 Seguro Social (%)</label>
+                        <label for="tasa-seguro-social" data-i18n="taxes.social_security">👥 Seguro Social (%)</label>
                         <input type="number" id="tasa-seguro-social" placeholder="6.2" value="6.2" min="0" max="10" step="0.1">
                     </div>
                     <div class="form-group">
-                        <label for="tasa-medicare">🏥 Medicare (%)</label>
+                        <label for="tasa-medicare" data-i18n="taxes.medicare">🏥 Medicare (%)</label>
                         <input type="number" id="tasa-medicare" placeholder="1.45" value="1.45" min="0" max="5" step="0.05">
                     </div>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="tasa-desempleo">💼 Seguro Desempleo (%)</label>
+                        <label for="tasa-desempleo" data-i18n="taxes.unemployment">💼 Seguro Desempleo (%)</label>
                         <input type="number" id="tasa-desempleo" placeholder="0.5" value="0.5" min="0" max="3" step="0.1">
                     </div>
                     <div class="form-group">
-                        <label for="otras-deducciones">📋 Otras Deducciones (%)</label>
+                        <label for="otras-deducciones" data-i18n="taxes.other_deductions">📋 Otras Deducciones (%)</label>
                         <input type="number" id="otras-deducciones" placeholder="0" value="0" min="0" max="10" step="0.1">
                     </div>
                 </div>
                 
                 <div class="tip-buttons" style="margin-top: 15px;">
-                    <button class="tip-btn" onclick="cargarPerfilImpuestos('basico')" style="grid-column: span 2;">📊 Perfil Básico</button>
-                    <button class="tip-btn" onclick="cargarPerfilImpuestos('alto')" style="grid-column: span 2;">💰 Ingresos Altos</button>
-                    <button class="tip-btn" onclick="cargarPerfilImpuestos('california')" style="grid-column: span 2;">🌴 California</button>
+                    <button class="tip-btn" onclick="cargarPerfilImpuestos('basico')" style="grid-column: span 2;" data-i18n="taxes.basic_profile">📊 Perfil Básico</button>
+                    <button class="tip-btn" onclick="cargarPerfilImpuestos('alto')" style="grid-column: span 2;" data-i18n="taxes.high_income">💰 Ingresos Altos</button>
+                    <button class="tip-btn" onclick="cargarPerfilImpuestos('california')" style="grid-column: span 2;" data-i18n="taxes.california">🌴 California</button>
                 </div>
             </div>
             
-            <button class="btn" onclick="calcularImpuestos()">Calcular Impuestos</button>
+            <button class="btn" onclick="calcularImpuestos()" data-i18n="taxes.calculate">Calcular Impuestos</button>
             
             <div class="result" id="resultado-impuestos">
-                <h3>Cálculo de Impuestos Detallado</h3>
+                <h3 data-i18n="taxes.detailed_calculation">Cálculo de Impuestos Detallado</h3>
                 <div class="result-item">
-                    <span class="result-label">Salario bruto anual:</span>
+                    <span class="result-label" data-i18n="taxes.gross_annual_salary">Salario bruto anual:</span>
                     <span class="result-value" id="salario-bruto-display">$0</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label">Deducciones totales:</span>
+                    <span class="result-label" data-i18n="taxes.total_deductions">Deducciones totales:</span>
                     <span class="result-value" id="deducciones-totales">$0</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label">Ingreso gravable:</span>
+                    <span class="result-label" data-i18n="taxes.taxable_income">Ingreso gravable:</span>
                     <span class="result-value" id="ingreso-gravable">$0</span>
                 </div>
                 
                 <!-- Desglose detallado -->
                 <div style="background: #f7fafc; padding: 15px; border-radius: 10px; margin: 15px 0;">
-                    <h4 style="color: #4a5568; margin-bottom: 10px;">📊 Desglose de Impuestos</h4>
+                    <h4 style="color: #4a5568; margin-bottom: 10px;" data-i18n="taxes.tax_breakdown">📊 Desglose de Impuestos</h4>
                     <div class="result-item">
-                        <span class="result-label">Impuesto federal (<span id="tasa-federal-display">22</span>%):</span>
+                        <span class="result-label"><span data-i18n="taxes.federal_tax">Impuesto federal</span> (<span id="tasa-federal-display">22</span>%):</span>
                         <span class="result-value" id="impuesto-federal">$0</span>
                     </div>
                     <div class="result-item">
-                        <span class="result-label">Impuesto estatal (<span id="tasa-estatal-display">5</span>%):</span>
+                        <span class="result-label"><span data-i18n="taxes.state_tax">Impuesto estatal</span> (<span id="tasa-estatal-display">5</span>%):</span>
                         <span class="result-value" id="impuesto-estatal">$0</span>
                     </div>
                     <div class="result-item">
-                        <span class="result-label">Seguro Social (<span id="tasa-ss-display">6.2</span>%):</span>
+                        <span class="result-label"><span data-i18n="taxes.social_security">Seguro Social</span> (<span id="tasa-ss-display">6.2</span>%):</span>
                         <span class="result-value" id="seguro-social">$0</span>
                     </div>
                     <div class="result-item">
-                        <span class="result-label">Medicare (<span id="tasa-medicare-display">1.45</span>%):</span>
+                        <span class="result-label"><span data-i18n="taxes.medicare">Medicare</span> (<span id="tasa-medicare-display">1.45</span>%):</span>
                         <span class="result-value" id="medicare">$0</span>
                     </div>
                     <div class="result-item">
-                        <span class="result-label">Seguro Desempleo (<span id="tasa-desempleo-display">0.5</span>%):</span>
+                        <span class="result-label"><span data-i18n="taxes.unemployment">Seguro Desempleo</span> (<span id="tasa-desempleo-display">0.5</span>%):</span>
                         <span class="result-value" id="seguro-desempleo">$0</span>
                     </div>
                     <div class="result-item">
-                        <span class="result-label">Otras deducciones (<span id="tasa-otras-display">0</span>%):</span>
+                        <span class="result-label"><span data-i18n="taxes.other_deductions">Otras deducciones</span> (<span id="tasa-otras-display">0</span>%):</span>
                         <span class="result-value" id="otras-deducciones-monto">$0</span>
                     </div>
                 </div>
                 
                 <div class="result-item" style="border-top: 2px solid #667eea; padding-top: 15px;">
-                    <span class="result-label">Total de impuestos:</span>
+                    <span class="result-label" data-i18n="taxes.total_taxes">Total de impuestos:</span>
                     <span class="result-value" id="total-impuestos">$0</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label">Salario neto anual:</span>
+                    <span class="result-label" data-i18n="taxes.net_annual_salary">Salario neto anual:</span>
                     <span class="result-value" id="salario-neto">$0</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label">Salario neto mensual:</span>
+                    <span class="result-label" data-i18n="taxes.net_monthly_salary">Salario neto mensual:</span>
                     <span class="result-value" id="salario-mensual">$0</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label">Salario neto semanal:</span>
+                    <span class="result-label" data-i18n="taxes.net_weekly_salary">Salario neto semanal:</span>
                     <span class="result-value" id="salario-semanal">$0</span>
                 </div>
                 
                 <!-- Gráfico visual de porcentajes -->
                 <div style="background: white; padding: 15px; border-radius: 10px; margin: 15px 0;">
-                    <h4 style="color: #4a5568; margin-bottom: 10px;">📈 Distribución del Salario</h4>
+                    <h4 style="color: #4a5568; margin-bottom: 10px;" data-i18n="taxes.salary_distribution">📈 Distribución del Salario</h4>
                     <div id="grafico-impuestos" style="margin: 10px 0;">
                         <!-- Se llena dinámicamente -->
                     </div>
                     <div class="result-item">
-                        <span class="result-label">Tasa efectiva de impuestos:</span>
+                        <span class="result-label" data-i18n="taxes.effective_tax_rate">Tasa efectiva de impuestos:</span>
                         <span class="result-value" id="tasa-efectiva">0%</span>
                     </div>
                 </div>
@@ -617,13 +676,13 @@
 
         <!-- Calculadora de Propinas -->
         <div class="calculator" id="calc-propinas">
-            <h2 class="calc-title">Calculadora de Propinas</h2>
+            <h2 class="calc-title" data-i18n="tips.title">Calculadora de Propinas</h2>
             <div class="form-group">
-                <label for="total-cuenta">🧾 Total de la cuenta</label>
+                <label for="total-cuenta" data-i18n="tips.bill_total">🧾 Total de la cuenta</label>
                 <input type="number" id="total-cuenta" placeholder="100.00" value="100" step="0.01">
             </div>
             <div class="form-group">
-                <label for="porcentaje-propina">💡 Porcentaje de propina</label>
+                <label for="porcentaje-propina" data-i18n="tips.tip_percentage">💡 Porcentaje de propina</label>
                 <input type="number" id="porcentaje-propina" placeholder="15" value="15" min="0" max="50" step="0.5">
             </div>
             
@@ -637,28 +696,28 @@
             </div>
             
             <div class="form-group">
-                <label for="num-personas">👥 Número de personas</label>
+                <label for="num-personas" data-i18n="tips.number_of_people">👥 Número de personas</label>
                 <input type="number" id="num-personas" placeholder="1" value="1" min="1">
             </div>
             
-            <button class="btn" onclick="calcularPropina()">Calcular Propina</button>
+            <button class="btn" onclick="calcularPropina()" data-i18n="tips.calculate">Calcular Propina</button>
             
             <div class="result" id="resultado-propina">
-                <h3>Cálculo de Propina</h3>
+                <h3 data-i18n="tips.calculation">Cálculo de Propina</h3>
                 <div class="result-item">
-                    <span class="result-label">Monto de propina:</span>
+                    <span class="result-label" data-i18n="tips.tip_amount">Monto de propina:</span>
                     <span class="result-value" id="monto-propina">$0.00</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label">Total a pagar:</span>
+                    <span class="result-label" data-i18n="tips.total_to_pay">Total a pagar:</span>
                     <span class="result-value" id="total-con-propina">$0.00</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label">Por persona:</span>
+                    <span class="result-label" data-i18n="tips.per_person">Por persona:</span>
                     <span class="result-value" id="por-persona">$0.00</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label">Propina por persona:</span>
+                    <span class="result-label" data-i18n="tips.tip_per_person">Propina por persona:</span>
                     <span class="result-value" id="propina-persona">$0.00</span>
                 </div>
             </div>
@@ -666,33 +725,33 @@
 
         <!-- Calculadora de Conversión -->
         <div class="calculator" id="calc-conversion">
-            <h2 class="calc-title">Conversor de Unidades</h2>
+            <h2 class="calc-title" data-i18n="conversion.title">Conversor de Unidades</h2>
             <div class="form-group">
-                <label for="tipo-conversion">📏 Tipo de conversión</label>
+                <label for="tipo-conversion" data-i18n="conversion.conversion_type">📏 Tipo de conversión</label>
                 <select id="tipo-conversion" onchange="cambiarTipoConversion()">
-                    <option value="longitud">Longitud</option>
-                    <option value="peso">Peso</option>
-                    <option value="temperatura">Temperatura</option>
-                    <option value="volumen">Volumen</option>
-                    <option value="area">Área</option>
-                    <option value="velocidad">Velocidad</option>
+                    <option value="longitud" data-i18n="conversion.length">Longitud</option>
+                    <option value="peso" data-i18n="conversion.weight">Peso</option>
+                    <option value="temperatura" data-i18n="conversion.temperature">Temperatura</option>
+                    <option value="volumen" data-i18n="conversion.volume">Volumen</option>
+                    <option value="area" data-i18n="conversion.area">Área</option>
+                    <option value="velocidad" data-i18n="conversion.speed">Velocidad</option>
                 </select>
             </div>
             
             <div class="form-group">
-                <label for="valor-original">🔢 Valor a convertir</label>
+                <label for="valor-original" data-i18n="conversion.value_to_convert">🔢 Valor a convertir</label>
                 <input type="number" id="valor-original" placeholder="1" value="1" step="any" oninput="convertirUnidades()">
             </div>
             
             <div class="form-row">
                 <div class="form-group">
-                    <label for="unidad-origen">De:</label>
+                    <label for="unidad-origen" data-i18n="conversion.from">De:</label>
                     <select id="unidad-origen" onchange="convertirUnidades()">
                         <!-- Se llena dinámicamente -->
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="unidad-destino">A:</label>
+                    <label for="unidad-destino" data-i18n="conversion.to">A:</label>
                     <select id="unidad-destino" onchange="convertirUnidades()">
                         <!-- Se llena dinámicamente -->
                     </select>
@@ -700,7 +759,7 @@
             </div>
             
             <div class="result show" id="resultado-conversion">
-                <h3>Resultado</h3>
+                <h3 data-i18n="conversion.result">Resultado</h3>
                 <div style="text-align: center; font-size: 1.5rem; padding: 20px; background: white; border-radius: 10px; margin: 15px 0;">
                     <span id="valor-convertido" style="color: #667eea; font-weight: 700;">1</span>
                     <span id="unidad-resultado" style="color: #4a5568; margin-left: 10px;">metros</span>
@@ -713,11 +772,488 @@
         </div>
 
         <div class="footer">
-            <p>📱 Aplicación offline • Sin conexión a internet requerida</p>
+            <p data-i18n="footer.offline">📱 Aplicación offline • Sin conexión a internet requerida</p>
         </div>
     </div>
 
     <script>
+        // Sistema de internacionalización
+        const translations = {
+            es: {
+                title: "🧮 Calculadoras Especializadas",
+                subtitle: "Herramientas financieras y de conversión",
+                nav: {
+                    mortgage: "🏠 Hipoteca",
+                    taxes: "💰 Impuestos",
+                    tips: "🍽️ Propinas",
+                    conversion: "📐 Conversión"
+                },
+                mortgage: {
+                    title: "Calculadora de Hipoteca",
+                    house_price: "💵 Precio de la casa",
+                    house_price_placeholder: "300000",
+                    down_payment: "💳 Enganche (%)",
+                    interest_rate: "📈 Tasa de interés (%)",
+                    loan_years: "📅 Años del préstamo",
+                    years_15: "15 años",
+                    years_20: "20 años",
+                    years_30: "30 años",
+                    calculate: "Calcular Hipoteca",
+                    summary: "Resumen de tu Hipoteca",
+                    loan_amount: "Monto del préstamo:",
+                    monthly_payment: "Pago mensual:",
+                    total_interest: "Total de intereses:",
+                    total_payment: "Total a pagar:",
+                    amortization_table: "Tabla de Amortización (Primeros 12 meses)",
+                    month: "Mes",
+                    payment: "Pago",
+                    principal: "Principal",
+                    interest: "Interés",
+                    balance: "Balance",
+                    show_table: "Ver Tabla de Amortización",
+                    hide_table: "Ocultar Tabla de Amortización"
+                },
+                taxes: {
+                    title: "Calculadora de Impuestos",
+                    gross_salary: "💼 Salario bruto anual",
+                    marital_status: "👫 Estado civil",
+                    single: "Soltero",
+                    married: "Casado",
+                    head_of_household: "Jefe de familia",
+                    dependents: "👶 Dependientes",
+                    extra_deductions: "📝 Deducciones extra",
+                    configure_rates: "⚙️ Configurar Porcentajes de Impuestos",
+                    federal_tax: "🏛️ Impuesto Federal (%)",
+                    state_tax: "🏢 Impuesto Estatal (%)",
+                    social_security: "👥 Seguro Social (%)",
+                    medicare: "🏥 Medicare (%)",
+                    unemployment: "💼 Seguro Desempleo (%)",
+                    other_deductions: "📋 Otras Deducciones (%)",
+                    basic_profile: "📊 Perfil Básico",
+                    high_income: "💰 Ingresos Altos",
+                    california: "🌴 California",
+                    calculate: "Calcular Impuestos",
+                    detailed_calculation: "Cálculo de Impuestos Detallado",
+                    gross_annual_salary: "Salario bruto anual:",
+                    total_deductions: "Deducciones totales:",
+                    taxable_income: "Ingreso gravable:",
+                    tax_breakdown: "📊 Desglose de Impuestos",
+                    total_taxes: "Total de impuestos:",
+                    net_annual_salary: "Salario neto anual:",
+                    net_monthly_salary: "Salario neto mensual:",
+                    net_weekly_salary: "Salario neto semanal:",
+                    salary_distribution: "📈 Distribución del Salario",
+                    effective_tax_rate: "Tasa efectiva de impuestos:",
+                    net_money: "💚 Dinero que te queda:",
+                    total_taxes_chart: "🏛️ Impuestos totales:"
+                },
+                tips: {
+                    title: "Calculadora de Propinas",
+                    bill_total: "🧾 Total de la cuenta",
+                    tip_percentage: "💡 Porcentaje de propina",
+                    number_of_people: "👥 Número de personas",
+                    calculate: "Calcular Propina",
+                    calculation: "Cálculo de Propina",
+                    tip_amount: "Monto de propina:",
+                    total_to_pay: "Total a pagar:",
+                    per_person: "Por persona:",
+                    tip_per_person: "Propina por persona:"
+                },
+                conversion: {
+                    title: "Conversor de Unidades",
+                    conversion_type: "📏 Tipo de conversión",
+                    length: "Longitud",
+                    weight: "Peso",
+                    temperature: "Temperatura",
+                    volume: "Volumen",
+                    area: "Área",
+                    speed: "Velocidad",
+                    value_to_convert: "🔢 Valor a convertir",
+                    from: "De:",
+                    to: "A:",
+                    result: "Resultado"
+                },
+                footer: {
+                    offline: "📱 Aplicación offline • Sin conexión a internet requerida"
+                },
+                units: {
+                    // Longitud
+                    metro: "metros",
+                    kilometro: "kilómetros",
+                    centimetro: "centímetros",
+                    milimetro: "milímetros",
+                    pulgada: "pulgadas",
+                    pie: "pies",
+                    yarda: "yardas",
+                    milla: "millas",
+                    // Peso
+                    kilogramo: "kilogramos",
+                    gramo: "gramos",
+                    libra: "libras",
+                    onza: "onzas",
+                    tonelada: "toneladas",
+                    piedra: "piedras",
+                    // Volumen
+                    litro: "litros",
+                    mililitro: "mililitros",
+                    galon: "galones",
+                    cuarto: "cuartos",
+                    pinta: "pintas",
+                    taza: "tazas",
+                    onza_liquida: "onzas líquidas",
+                    metro_cubico: "metros cúbicos",
+                    // Área
+                    metro_cuadrado: "metros cuadrados",
+                    kilometro_cuadrado: "kilómetros cuadrados",
+                    centimetro_cuadrado: "centímetros cuadrados",
+                    pie_cuadrado: "pies cuadrados",
+                    pulgada_cuadrada: "pulgadas cuadradas",
+                    acre: "acres",
+                    hectarea: "hectáreas",
+                    // Velocidad
+                    mps: "metros/segundo",
+                    kmh: "km/hora",
+                    mph: "millas/hora",
+                    nudos: "nudos",
+                    pps: "pies/segundo"
+                }
+            },
+            en: {
+                title: "🧮 Specialized Calculators",
+                subtitle: "Financial and conversion tools",
+                nav: {
+                    mortgage: "🏠 Mortgage",
+                    taxes: "💰 Taxes",
+                    tips: "🍽️ Tips",
+                    conversion: "📐 Conversion"
+                },
+                mortgage: {
+                    title: "Mortgage Calculator",
+                    house_price: "💵 House price",
+                    house_price_placeholder: "300000",
+                    down_payment: "💳 Down payment (%)",
+                    interest_rate: "📈 Interest rate (%)",
+                    loan_years: "📅 Loan years",
+                    years_15: "15 years",
+                    years_20: "20 years",
+                    years_30: "30 years",
+                    calculate: "Calculate Mortgage",
+                    summary: "Your Mortgage Summary",
+                    loan_amount: "Loan amount:",
+                    monthly_payment: "Monthly payment:",
+                    total_interest: "Total interest:",
+                    total_payment: "Total payment:",
+                    amortization_table: "Amortization Table (First 12 months)",
+                    month: "Month",
+                    payment: "Payment",
+                    principal: "Principal",
+                    interest: "Interest",
+                    balance: "Balance",
+                    show_table: "Show Amortization Table",
+                    hide_table: "Hide Amortization Table"
+                },
+                taxes: {
+                    title: "Tax Calculator",
+                    gross_salary: "💼 Annual gross salary",
+                    marital_status: "👫 Marital status",
+                    single: "Single",
+                    married: "Married",
+                    head_of_household: "Head of household",
+                    dependents: "👶 Dependents",
+                    extra_deductions: "📝 Extra deductions",
+                    configure_rates: "⚙️ Configure Tax Percentages",
+                    federal_tax: "🏛️ Federal Tax (%)",
+                    state_tax: "🏢 State Tax (%)",
+                    social_security: "👥 Social Security (%)",
+                    medicare: "🏥 Medicare (%)",
+                    unemployment: "💼 Unemployment Insurance (%)",
+                    other_deductions: "📋 Other Deductions (%)",
+                    basic_profile: "📊 Basic Profile",
+                    high_income: "💰 High Income",
+                    california: "🌴 California",
+                    calculate: "Calculate Taxes",
+                    detailed_calculation: "Detailed Tax Calculation",
+                    gross_annual_salary: "Annual gross salary:",
+                    total_deductions: "Total deductions:",
+                    taxable_income: "Taxable income:",
+                    tax_breakdown: "📊 Tax Breakdown",
+                    total_taxes: "Total taxes:",
+                    net_annual_salary: "Annual net salary:",
+                    net_monthly_salary: "Monthly net salary:",
+                    net_weekly_salary: "Weekly net salary:",
+                    salary_distribution: "📈 Salary Distribution",
+                    effective_tax_rate: "Effective tax rate:",
+                    net_money: "💚 Money you keep:",
+                    total_taxes_chart: "🏛️ Total taxes:"
+                },
+                tips: {
+                    title: "Tip Calculator",
+                    bill_total: "🧾 Bill total",
+                    tip_percentage: "💡 Tip percentage",
+                    number_of_people: "👥 Number of people",
+                    calculate: "Calculate Tip",
+                    calculation: "Tip Calculation",
+                    tip_amount: "Tip amount:",
+                    total_to_pay: "Total to pay:",
+                    per_person: "Per person:",
+                    tip_per_person: "Tip per person:"
+                },
+                conversion: {
+                    title: "Unit Converter",
+                    conversion_type: "📏 Conversion type",
+                    length: "Length",
+                    weight: "Weight",
+                    temperature: "Temperature",
+                    volume: "Volume",
+                    area: "Area",
+                    speed: "Speed",
+                    value_to_convert: "🔢 Value to convert",
+                    from: "From:",
+                    to: "To:",
+                    result: "Result"
+                },
+                footer: {
+                    offline: "📱 Offline app • No internet connection required"
+                },
+                units: {
+                    // Length
+                    metro: "meters",
+                    kilometro: "kilometers",
+                    centimetro: "centimeters",
+                    milimetro: "millimeters",
+                    pulgada: "inches",
+                    pie: "feet",
+                    yarda: "yards",
+                    milla: "miles",
+                    // Weight
+                    kilogramo: "kilograms",
+                    gramo: "grams",
+                    libra: "pounds",
+                    onza: "ounces",
+                    tonelada: "tons",
+                    piedra: "stones",
+                    // Volume
+                    litro: "liters",
+                    mililitro: "milliliters",
+                    galon: "gallons",
+                    cuarto: "quarts",
+                    pinta: "pints",
+                    taza: "cups",
+                    onza_liquida: "fluid ounces",
+                    metro_cubico: "cubic meters",
+                    // Area
+                    metro_cuadrado: "square meters",
+                    kilometro_cuadrado: "square kilometers",
+                    centimetro_cuadrado: "square centimeters",
+                    pie_cuadrado: "square feet",
+                    pulgada_cuadrada: "square inches",
+                    acre: "acres",
+                    hectarea: "hectares",
+                    // Speed
+                    mps: "meters/second",
+                    kmh: "km/hour",
+                    mph: "miles/hour",
+                    nudos: "knots",
+                    pps: "feet/second"
+                }
+            },
+            de: {
+                title: "🧮 Spezialisierte Rechner",
+                subtitle: "Finanz- und Umrechnungstools",
+                nav: {
+                    mortgage: "🏠 Hypothek",
+                    taxes: "💰 Steuern",
+                    tips: "🍽️ Trinkgeld",
+                    conversion: "📐 Umrechnung"
+                },
+                mortgage: {
+                    title: "Hypothekenrechner",
+                    house_price: "💵 Hauspreis",
+                    house_price_placeholder: "300000",
+                    down_payment: "💳 Anzahlung (%)",
+                    interest_rate: "📈 Zinssatz (%)",
+                    loan_years: "📅 Darlehensjahre",
+                    years_15: "15 Jahre",
+                    years_20: "20 Jahre",
+                    years_30: "30 Jahre",
+                    calculate: "Hypothek Berechnen",
+                    summary: "Ihre Hypotheken-Zusammenfassung",
+                    loan_amount: "Darlehensbetrag:",
+                    monthly_payment: "Monatliche Rate:",
+                    total_interest: "Gesamtzinsen:",
+                    total_payment: "Gesamtzahlung:",
+                    amortization_table: "Tilgungstabelle (Erste 12 Monate)",
+                    month: "Monat",
+                    payment: "Rate",
+                    principal: "Tilgung",
+                    interest: "Zinsen",
+                    balance: "Saldo",
+                    show_table: "Tilgungstabelle Anzeigen",
+                    hide_table: "Tilgungstabelle Ausblenden"
+                },
+                taxes: {
+                    title: "Steuerrechner",
+                    gross_salary: "💼 Brutto-Jahresgehalt",
+                    marital_status: "👫 Familienstand",
+                    single: "Ledig",
+                    married: "Verheiratet",
+                    head_of_household: "Haushaltsvorstand",
+                    dependents: "👶 Unterhaltsberechtigte",
+                    extra_deductions: "📝 Zusätzliche Abzüge",
+                    configure_rates: "⚙️ Steuersätze Konfigurieren",
+                    federal_tax: "🏛️ Bundessteuer (%)",
+                    state_tax: "🏢 Landessteuer (%)",
+                    social_security: "👥 Sozialversicherung (%)",
+                    medicare: "🏥 Krankenversicherung (%)",
+                    unemployment: "💼 Arbeitslosenversicherung (%)",
+                    other_deductions: "📋 Andere Abzüge (%)",
+                    basic_profile: "📊 Basis-Profil",
+                    high_income: "💰 Hohes Einkommen",
+                    california: "🌴 Kalifornien",
+                    calculate: "Steuern Berechnen",
+                    detailed_calculation: "Detaillierte Steuerberechnung",
+                    gross_annual_salary: "Brutto-Jahresgehalt:",
+                    total_deductions: "Gesamtabzüge:",
+                    taxable_income: "Zu versteuerndes Einkommen:",
+                    tax_breakdown: "📊 Steueraufschlüsselung",
+                    total_taxes: "Gesamtsteuern:",
+                    net_annual_salary: "Netto-Jahresgehalt:",
+                    net_monthly_salary: "Netto-Monatsgehalt:",
+                    net_weekly_salary: "Netto-Wochengehalt:",
+                    salary_distribution: "📈 Gehaltsverteilung",
+                    effective_tax_rate: "Effektiver Steuersatz:",
+                    net_money: "💚 Geld das bleibt:",
+                    total_taxes_chart: "🏛️ Gesamtsteuern:"
+                },
+                tips: {
+                    title: "Trinkgeldrechner",
+                    bill_total: "🧾 Rechnungsbetrag",
+                    tip_percentage: "💡 Trinkgeld-Prozentsatz",
+                    number_of_people: "👥 Anzahl Personen",
+                    calculate: "Trinkgeld Berechnen",
+                    calculation: "Trinkgeld-Berechnung",
+                    tip_amount: "Trinkgeldbetrag:",
+                    total_to_pay: "Gesamtbetrag:",
+                    per_person: "Pro Person:",
+                    tip_per_person: "Trinkgeld pro Person:"
+                },
+                conversion: {
+                    title: "Einheitenumrechner",
+                    conversion_type: "📏 Umrechnungstyp",
+                    length: "Länge",
+                    weight: "Gewicht",
+                    temperature: "Temperatur",
+                    volume: "Volumen",
+                    area: "Fläche",
+                    speed: "Geschwindigkeit",
+                    value_to_convert: "🔢 Umzurechnender Wert",
+                    from: "Von:",
+                    to: "Nach:",
+                    result: "Ergebnis"
+                },
+                footer: {
+                    offline: "📱 Offline-App • Keine Internetverbindung erforderlich"
+                },
+                units: {
+                    // Length
+                    metro: "Meter",
+                    kilometro: "Kilometer",
+                    centimetro: "Zentimeter",
+                    milimetro: "Millimeter",
+                    pulgada: "Zoll",
+                    pie: "Fuß",
+                    yarda: "Yard",
+                    milla: "Meilen",
+                    // Weight
+                    kilogramo: "Kilogramm",
+                    gramo: "Gramm",
+                    libra: "Pfund",
+                    onza: "Unzen",
+                    tonelada: "Tonnen",
+                    piedra: "Stones",
+                    // Volume
+                    litro: "Liter",
+                    mililitro: "Milliliter",
+                    galon: "Gallonen",
+                    cuarto: "Quarts",
+                    pinta: "Pints",
+                    taza: "Tassen",
+                    onza_liquida: "Flüssigunzen",
+                    metro_cubico: "Kubikmeter",
+                    // Area
+                    metro_cuadrado: "Quadratmeter",
+                    kilometro_cuadrado: "Quadratkilometer",
+                    centimetro_cuadrado: "Quadratzentimeter",
+                    pie_cuadrado: "Quadratfuß",
+                    pulgada_cuadrada: "Quadratzoll",
+                    acre: "Acres",
+                    hectarea: "Hektar",
+                    // Speed
+                    mps: "Meter/Sekunde",
+                    kmh: "km/Stunde",
+                    mph: "Meilen/Stunde",
+                    nudos: "Knoten",
+                    pps: "Fuß/Sekunde"
+                }
+            }
+        };
+
+        let currentLanguage = 'es';
+
+        // Función para cambiar idioma
+        function cambiarIdioma(idioma) {
+            currentLanguage = idioma;
+            
+            // Actualizar botones de idioma
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Actualizar atributo lang del documento
+            document.documentElement.lang = idioma;
+            
+            // Aplicar traducciones
+            aplicarTraducciones();
+            
+            // Guardar preferencia en localStorage
+            localStorage.setItem('language', idioma);
+            
+            // Recalcular conversiones para actualizar unidades
+            if (document.getElementById('calc-conversion').classList.contains('active')) {
+                cambiarTipoConversion();
+            }
+        }
+
+        // Función para aplicar traducciones
+        function aplicarTraducciones() {
+            const t = translations[currentLanguage];
+            
+            // Traducir elementos con data-i18n
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                const translation = getNestedTranslation(t, key);
+                if (translation) {
+                    element.textContent = translation;
+                }
+            });
+            
+            // Traducir placeholders
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-i18n-placeholder');
+                const translation = getNestedTranslation(t, key);
+                if (translation) {
+                    element.placeholder = translation;
+                }
+            });
+            
+            // Actualizar título de la página
+            document.title = t.title;
+        }
+
+        // Función auxiliar para obtener traducciones anidadas
+        function getNestedTranslation(obj, path) {
+            return path.split('.').reduce((current, key) => current && current[key], obj);
+        }
+
         // Datos para conversiones
         const unidades = {
             longitud: {
@@ -852,13 +1388,14 @@
         function toggleAmortization() {
             const tabla = document.getElementById('tabla-amortizacion');
             const btn = document.getElementById('btn-amortization');
+            const t = translations[currentLanguage];
             
             if (tabla.style.display === 'none') {
                 tabla.style.display = 'block';
-                btn.textContent = 'Ocultar Tabla de Amortización';
+                btn.textContent = t.mortgage.hide_table;
             } else {
                 tabla.style.display = 'none';
-                btn.textContent = 'Ver Tabla de Amortización';
+                btn.textContent = t.mortgage.show_table;
             }
         }
 
@@ -943,19 +1480,20 @@
             const grafico = document.getElementById('grafico-impuestos');
             const porcentajeNeto = (salarioNeto / salarioBruto * 100);
             const porcentajeImpuestos = (totalImpuestos / salarioBruto * 100);
+            const t = translations[currentLanguage];
             
             grafico.innerHTML = `
                 <div style="display: flex; height: 30px; border-radius: 15px; overflow: hidden; margin: 10px 0;">
                     <div style="background: linear-gradient(135deg, #48bb78, #38a169); width: ${porcentajeNeto}%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.9rem;">
-                        ${porcentajeNeto.toFixed(1)}% Neto
+                        ${porcentajeNeto.toFixed(1)}% ${currentLanguage === 'es' ? 'Neto' : currentLanguage === 'en' ? 'Net' : 'Netto'}
                     </div>
                     <div style="background: linear-gradient(135deg, #f56565, #e53e3e); width: ${porcentajeImpuestos}%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.9rem;">
-                        ${porcentajeImpuestos.toFixed(1)}% Impuestos
+                        ${porcentajeImpuestos.toFixed(1)}% ${currentLanguage === 'es' ? 'Impuestos' : currentLanguage === 'en' ? 'Taxes' : 'Steuern'}
                     </div>
                 </div>
                 <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #4a5568;">
-                    <span>💚 Dinero que te queda: ${formatearMoneda(salarioNeto)}</span>
-                    <span>🏛️ Impuestos totales: ${formatearMoneda(totalImpuestos)}</span>
+                    <span>${t.taxes.net_money} ${formatearMoneda(salarioNeto)}</span>
+                    <span>${t.taxes.total_taxes_chart} ${formatearMoneda(totalImpuestos)}</span>
                 </div>
             `;
         }
@@ -1043,6 +1581,7 @@
             const tipo = document.getElementById('tipo-conversion').value;
             const selectOrigen = document.getElementById('unidad-origen');
             const selectDestino = document.getElementById('unidad-destino');
+            const t = translations[currentLanguage];
             
             selectOrigen.innerHTML = '';
             selectDestino.innerHTML = '';
@@ -1058,7 +1597,7 @@
                 selectDestino.selectedIndex = 1;
             } else {
                 Object.keys(unidades[tipo]).forEach(unidad => {
-                    const nombreUnidad = unidad.replace('_', ' ');
+                    const nombreUnidad = t.units[unidad] || unidad.replace('_', ' ');
                     const option1 = new Option(nombreUnidad, unidad);
                     const option2 = new Option(nombreUnidad, unidad);
                     selectOrigen.add(option1);
@@ -1075,6 +1614,7 @@
             const tipo = document.getElementById('tipo-conversion').value;
             const unidadOrigen = document.getElementById('unidad-origen').value;
             const unidadDestino = document.getElementById('unidad-destino').value;
+            const t = translations[currentLanguage];
             
             let resultado = 0;
             
@@ -1087,7 +1627,11 @@
             }
             
             document.getElementById('valor-convertido').textContent = resultado.toFixed(4);
-            document.getElementById('unidad-resultado').textContent = unidadDestino.replace('_', ' ');
+            
+            const unidadTexto = tipo === 'temperatura' 
+                ? unidades.temperatura[unidadDestino].simbolo 
+                : (t.units[unidadDestino] || unidadDestino.replace('_', ' '));
+            document.getElementById('unidad-resultado').textContent = unidadTexto;
             
             mostrarConversionesComunes(valor, tipo, unidadOrigen);
         }
@@ -1114,6 +1658,7 @@
 
         function mostrarConversionesComunes(valor, tipo, unidadOrigen) {
             const grid = document.getElementById('conversiones-comunes');
+            const t = translations[currentLanguage];
             grid.innerHTML = '';
             
             if (tipo === 'temperatura') {
@@ -1144,7 +1689,7 @@
                         item.className = 'conversion-item';
                         item.innerHTML = `
                             <div class="conversion-value">${resultado.toFixed(4)}</div>
-                            <div class="conversion-unit">${unidad.replace('_', ' ')}</div>
+                            <div class="conversion-unit">${t.units[unidad] || unidad.replace('_', ' ')}</div>
                         `;
                         grid.appendChild(item);
                     }
@@ -1154,16 +1699,31 @@
 
         // Función de formateo de moneda
         function formatearMoneda(cantidad) {
-            return new Intl.NumberFormat('es-US', {
+            const locale = currentLanguage === 'de' ? 'de-DE' : currentLanguage === 'en' ? 'en-US' : 'es-US';
+            const currency = currentLanguage === 'de' ? 'EUR' : 'USD';
+            
+            return new Intl.NumberFormat(locale, {
                 style: 'currency',
-                currency: 'USD'
+                currency: currency
             }).format(cantidad);
         }
 
         // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
+            // Cargar idioma guardado
+            const savedLanguage = localStorage.getItem('language') || 'es';
+            if (savedLanguage !== 'es') {
+                // Actualizar botón activo
+                document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelector(`[onclick="cambiarIdioma('${savedLanguage}')"]`).classList.add('active');
+                currentLanguage = savedLanguage;
+                document.documentElement.lang = savedLanguage;
+            }
+            
+            aplicarTraducciones();
             cambiarTipoConversion();
             calcularPropina();
+            inicializarScrollMobile();
         });
 
         // Permitir solo números en inputs numéricos
@@ -1248,13 +1808,6 @@
         window.addEventListener('resize', ajustarPantalla);
         window.addEventListener('orientationchange', ajustarPantalla);
         ajustarPantalla();
-        
-        // Inicializar en carga de página
-        document.addEventListener('DOMContentLoaded', function() {
-            inicializarScrollMobile();
-            cambiarTipoConversion();
-            calcularPropina();
-        });
     </script>
 </body>
 </html>
